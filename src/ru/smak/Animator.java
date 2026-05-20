@@ -3,6 +3,7 @@ package ru.smak;
 import ru.smak.ui.FieldPanel;
 
 import javax.swing.SwingUtilities;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,15 +12,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Animator {
     private final ScheduledExecutorService scheduler;
-    private final FieldPanel panel;
+    private final List<Runnable> listeners = new ArrayList<>();
     private final List<Circle> circles;
     private volatile boolean running = false;
 
     // Ссылка на запланированную задачу для отмены
     private ScheduledFuture<?> animationTask;
 
+
+
     public Animator(FieldPanel panel, List<Circle> circles) {
-        this.panel = panel;
+        //this.panel = panel;
         this.circles = circles;
 
         // Пул создаётся ОДИН раз и живёт до закрытия приложения
@@ -34,7 +37,12 @@ public class Animator {
         if (running) return;
         running = true;
         // Сохраняем Future, чтобы позже отменить именно эту задачу
-        animationTask = scheduler.scheduleAtFixedRate(this::animationTick, 0, 16, TimeUnit.MILLISECONDS);
+        animationTask = scheduler.scheduleAtFixedRate(
+                this::animationTick,
+                0,
+                16,
+                TimeUnit.MILLISECONDS
+        );
     }
 
     public void stop() {
@@ -63,6 +71,11 @@ public class Animator {
 
     private void animationTick() {
         circles.forEach(Circle::move);
-        SwingUtilities.invokeLater(panel::repaint);
+        listeners.forEach(Runnable::run);
+        //SwingUtilities.invokeLater(panel::repaint);
+    }
+
+    public void addFrameListener(Runnable l){
+        listeners.add(l);
     }
 }

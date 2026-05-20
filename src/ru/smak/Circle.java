@@ -7,7 +7,7 @@ public class Circle {
     private double dx, dy;    // Вектор скорости
     private final Color color;
     private final int radius;
-    private final int containerWidth, containerHeight;
+    private int containerWidth, containerHeight;
 
     /**
      * Создает объект-кружок с заданными характеристиками
@@ -67,5 +67,21 @@ public class Circle {
             radius * 2,
             radius * 2
         );
+    }
+
+    public int getContainerWidth() {
+        return containerWidth;
+    }
+
+    public void setContainerWidth(int containerWidth) {
+        this.containerWidth = containerWidth;
+    }
+
+    public int getContainerHeight() {
+        return containerHeight;
+    }
+
+    public void setContainerHeight(int containerHeight) {
+        this.containerHeight = containerHeight;
     }
 }

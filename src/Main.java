@@ -42,6 +42,9 @@ private void createAndShowGUI() {
 
     // Контроллер анимации
     Animator animator = new Animator(panel, circles);
+    animator.addFrameListener(()->{
+        SwingUtilities.invokeLater(panel::repaint);
+    });
 
     // Кнопки управления
     JPanel controls = new JPanel();
@@ -52,8 +55,8 @@ private void createAndShowGUI() {
         animator.start();
     });
     stopBtn.addActionListener(e -> {
-        animator.stop();
         panel.clearCircles();
+        animator.stop();
     });
     controls.add(startBtn);
     controls.add(stopBtn);

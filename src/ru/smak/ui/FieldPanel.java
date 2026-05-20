@@ -1,8 +1,10 @@
 package ru.smak.ui;
 import ru.smak.Circle;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +13,16 @@ public class FieldPanel extends JPanel {
     private final List<Circle> circles = new ArrayList<>();
     public FieldPanel() {
         setBackground(Color.WHITE);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                circles.forEach(c -> {
+                    c.setContainerHeight(getHeight());
+                    c.setContainerWidth(getWidth());
+                });
+            }
+        });
     }
 
     public void addAllCircles(List<Circle> circle){
@@ -19,6 +31,7 @@ public class FieldPanel extends JPanel {
 
     public void clearCircles(){
         circles.clear();
+        SwingUtilities.invokeLater(this::repaint);
     }
 
     public void removeNextCircle(){
