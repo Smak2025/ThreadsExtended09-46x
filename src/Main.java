@@ -4,6 +4,8 @@ import ru.smak.ui.FieldPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -70,6 +72,16 @@ private void createAndShowGUI() {
         public void windowClosing(WindowEvent e) {
             animator.stop(); // Останавливаем пул перед выходом
             frame.dispose();
+        }
+    });
+    panel.addComponentListener(new ComponentAdapter() {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            super.componentResized(e);
+            circles.forEach(c -> {
+                c.setContainerHeight(panel.getHeight());
+                c.setContainerWidth(panel.getWidth());
+            });
         }
     });
 }

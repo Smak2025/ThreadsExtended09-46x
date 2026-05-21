@@ -20,16 +20,6 @@ public class FieldPanel extends JPanel {
     private final List<Circle> tmpCircles = new ArrayList<>();
     public FieldPanel() {
         setBackground(Color.WHITE);
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                circles.forEach(c -> {
-                    c.setContainerHeight(getHeight());
-                    c.setContainerWidth(getWidth());
-                });
-            }
-        });
         scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "Add/Remover-Thread");
             t.setDaemon(true);
