@@ -19,10 +19,7 @@ public class Animator {
     // Ссылка на запланированную задачу для отмены
     private ScheduledFuture<?> animationTask;
 
-
-
-    public Animator(FieldPanel panel, List<Circle> circles) {
-        //this.panel = panel;
+    public Animator(List<Circle> circles) {
         this.circles = circles;
 
         // Пул создаётся ОДИН раз и живёт до закрытия приложения

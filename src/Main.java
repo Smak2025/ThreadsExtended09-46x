@@ -17,9 +17,22 @@ void main(String[] args) {
 
 private void createAndShowGUI() {
     JFrame frame = new JFrame("Modern Java Concurrency: Animator");
+    frame.setMinimumSize(new Dimension(300, 250));
     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     frame.setSize(800, 600);
     frame.setLocationRelativeTo(null);
+
+    FieldPanel panel = new FieldPanel();
+    frame.add(panel, BorderLayout.CENTER);
+
+    // Кнопки управления
+    JPanel controls = new JPanel();
+    JButton startBtn = new JButton("▶ Start");
+    JButton stopBtn = new JButton("⏹ Stop");
+    controls.add(startBtn);
+    controls.add(stopBtn);
+    frame.add(controls, BorderLayout.SOUTH);
+    frame.setVisible(true);
 
     // Генерация шариков
     List<Circle> circles = new ArrayList<>();
@@ -32,36 +45,25 @@ private void createAndShowGUI() {
                 rand.nextDouble(2, 6) * (rand.nextBoolean() ? 1 : -1),
                 new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)),
                 rand.nextInt(10, 25),
-                800,
-                600
-        ));
+                panel.getWidth(),
+                panel.getHeight()
+                )
+        );
     }
-
-    FieldPanel panel = new FieldPanel();
-    frame.add(panel, BorderLayout.CENTER);
-
     // Контроллер анимации
-    Animator animator = new Animator(panel, circles);
+    Animator animator = new Animator(circles);
     animator.addFrameListener(()->{
         SwingUtilities.invokeLater(panel::repaint);
     });
 
-    // Кнопки управления
-    JPanel controls = new JPanel();
-    JButton startBtn = new JButton("▶ Start");
-    JButton stopBtn = new JButton("⏹ Stop");
     startBtn.addActionListener(e -> {
         panel.addAllCircles(circles);
         animator.start();
     });
     stopBtn.addActionListener(e -> {
-        panel.clearCircles();
         animator.stop();
+        panel.clearCircles();
     });
-    controls.add(startBtn);
-    controls.add(stopBtn);
-    frame.add(controls, BorderLayout.SOUTH);
-
     // Корректное завершение при закрытии окна
     frame.addWindowListener(new WindowAdapter() {
         @Override
@@ -70,6 +72,4 @@ private void createAndShowGUI() {
             frame.dispose();
         }
     });
-
-    frame.setVisible(true);
 }
